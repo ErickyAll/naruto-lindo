@@ -14,25 +14,24 @@ var DB = { quotes: [] }
 DB.quotes = database.Data
 
 function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 /** Rota utilizada no client desenvolvido em react */
 app.get('/random-quote', (req, res) => {
-  var id = getRandomIntInclusive(0,508)
-  if(id === undefined || isNaN(id)){
+  var id = getRandomIntInclusive(0, 508)
+  if (id === undefined || isNaN(id)) {
     res.sendStatus(400)
   }
   var quote = DB.quotes.find(q => q.id === id)
-  if(quote !== undefined) {
+  if (quote !== undefined) {
     res.json(quote)
   } else {
     res.sendStatus(404)
   }
 })
-
 
 app.get('/quotes', (req, res) => {
   res.json(DB.quotes)
@@ -78,33 +77,31 @@ app.delete('/quote/:id', (req, res) => {
   }
 })
 
-
 app.put('/quote/:id', (req, res) => {
-  if(isNaN(req.params.id)) {
+  if (isNaN(req.params.id)) {
     res.sendStatus(400)
   } else {
     var id = parseInt(req.params.id)
     var qt = DB.quotes.find(q => q.id == id)
 
-    if(qt !== undefined) {
-      var {name, quote} = req.body
+    if (qt !== undefined) {
+      var { name, quote } = req.body
 
-      if(name !== undefined && isNaN(name)) {
+      if (name !== undefined && isNaN(name)) {
         DB.quotes[id].name = name
       }
-      if(quote !== undefined && isNaN(name)) {
-        DB.quotes[id].quote = quote       
+      if (quote !== undefined && isNaN(name)) {
+        DB.quotes[id].quote = quote
       }
 
       res.sendStatus(200)
-
     } else {
       res.sendStatus(404)
     }
   }
 })
 
-app.listen(3456, () => {
+app.listen(process.env.PORT, () => {
   console.log(`
   http://localhost:3456/quotes
   ==============================
